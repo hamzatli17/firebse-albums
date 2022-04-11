@@ -1,25 +1,57 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react'
+//import {firebase} from 'firebase/app';
+import 'firebase/firestore';
 
-function App() {
+import {app} from './base'
+import NewAlbumForm from './NewAlbumForm'
+import { getFirestore,collection, getDocs } from 'firebase/firestore';
+
+//const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const App = () => {
+  const [albums,setAlbums] = useState([
+ 
+  ])
+
+
+  useEffect(() => {
+    const q = (collection(db,"album")) ;
+    
+    const querySnapshot =   getDocs(q);
+    
+    
+    querySnapshot.then((snapshot) =>{
+     // console.log("Current data: ", doc);
+     // tempAlbums.setAlbums(doc)
+     const tempAlbums =[]
+     snapshot.docs.forEach((doc) =>{
+      tempAlbums.push( doc.data())
+     })
+     setAlbums(tempAlbums)
+      })
+    
+  
+  })
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+<>
+    <section>
+    {
+        albums.map(album =>(
+          <aside key={album.name}>
+        <img src={album.image}alt='album'/>
+        <h3>
+          {albums.ame} 
+        </h3>
+      </aside>
+        ))
+     }
+  
+      <footer>
+      <NewAlbumForm/>
+      </footer>
+    </section>
+    </>
+  )
 }
 
-export default App;
+export default App
